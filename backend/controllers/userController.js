@@ -93,7 +93,29 @@ exports.insertProjectToUser = function (req, res) {
                 res.send(err);
             res.json({
                 status: "success",
-                message: 'User deleted'
+                message: 'Project inserted successfully'
+            });
+        });
+};
+
+exports.insertTaskIntoProject = function (req, res) {
+    User.updateOne(
+        { 'project.name': req.params.projectName},
+        {
+            $push: {
+                'project.$.tasks': {
+                    name: req.body.name,
+                    creationDate: req.body.creationDate,
+                    finishDate: req.body.finishDate
+                }
+            }
+        },
+        function (err, success) {
+            if (err)
+                res.send(err);
+            res.json({
+                status: "success",
+                message: 'Task inserted'
             });
         });
 };

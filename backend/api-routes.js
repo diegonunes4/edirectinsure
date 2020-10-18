@@ -12,9 +12,11 @@ router.get('/', function (req, res) {
 // Import user controller
 var userController = require('./controllers/userController');
 // User routes
+
 router.route('/user')
     .get(userController.index)
     .post(userController.createUser);
+
 router.route('/user/:name')
     .get(userController.findUserByName)
     .patch(userController.updateUserByName)
@@ -22,6 +24,9 @@ router.route('/user/:name')
     .delete(userController.deleteUserByName)
 router.route('/projects/:name')
     .put(userController.insertProjectToUser)
+router.route('/tasks/:userName/:projectName')
+    .put(userController.insertTaskIntoProject)
+
 
 
 
