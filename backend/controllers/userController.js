@@ -1,5 +1,6 @@
 // Import User model
 const User = require('../models/userModel');
+const mongoose = require('mongoose');
 
 exports.index = function (req, res) {
     User.get(function (err, users) {
@@ -18,12 +19,8 @@ exports.index = function (req, res) {
 };
 
 // Handle create user actions
-exports.new = function (req, res) {
-    var user = new User();
-    user.name = req.body.name,
-        user.birthdate = req.body.birthdate,
-        user.email = req.body.email,
-        user.projects = req.body.projects
+exports.createUser = function (req, res) {
+    var user = new User(req.body);
     user.save(function (err) {
         if (err)
             res.json(err);
@@ -35,8 +32,8 @@ exports.new = function (req, res) {
 };
 
 // Handle view user info
-exports.view = function (req, res) {
-    User.findById(req.params.user_id, function (err, user) {
+exports.findUserByName = function (req, res) {
+    User.find({ name: req.params.name }, function (err, user) {
         if (err)
             res.send(err);
         res.json({
@@ -47,8 +44,8 @@ exports.view = function (req, res) {
 };
 
 // Handle update user info
-exports.update = function (req, res) {
-    User.findById(req.params.user_id, function (err, user) {
+exports.updateUserByName = function (req, res) {
+    User.find({ name: req.params.name }, function (err, user) {
         if (err)
             res.send(err);
         user.name = req.body.name,
@@ -68,9 +65,9 @@ exports.update = function (req, res) {
 };
 
 // Handle delete user
-exports.delete = function (req, res) {
-    User.remove({
-        _id: req.params.user_id
+exports.deleteUserByName = function (req, res) {
+    User.deleteOne({
+        name: req.params.name
     }, function (err, user) {
         if (err)
             res.send(err);
@@ -79,4 +76,24 @@ exports.delete = function (req, res) {
             message: 'User deleted'
         });
     });
+};
+
+exports.insertProjectToUser = function (req, res) {
+    User.updateOne(
+        { name: req.params.name },
+        {
+            $push: {
+                project: {
+                    name: req.body.name
+                }
+            }
+        },
+        function (err, success) {
+            if (err)
+                res.send(err);
+            res.json({
+                status: "success",
+                message: 'User deleted'
+            });
+        });
 };

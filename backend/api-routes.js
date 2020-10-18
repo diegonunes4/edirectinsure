@@ -14,11 +14,16 @@ var userController = require('./controllers/userController');
 // User routes
 router.route('/user')
     .get(userController.index)
-    .post(userController.new);
-router.route('/user/:contact_id')
-    .get(userController.view)
-    .patch(userController.update)
-    .put(userController.update)
-    .delete(userController.delete);
+    .post(userController.createUser);
+router.route('/user/:name')
+    .get(userController.findUserByName)
+    .patch(userController.updateUserByName)
+    .put(userController.updateUserByName)
+    .delete(userController.deleteUserByName)
+router.route('/projects/:name')
+    .put(userController.insertProjectToUser)
+
+
+
 // Export API routes
 module.exports = router;

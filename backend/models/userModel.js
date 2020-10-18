@@ -10,10 +10,20 @@ const userSchema = mongoose.Schema({
         default: new Date()
     },
     email: String,
-    projects: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Project"
-    }]
+    project: [{
+        name: String,
+        tasks: [{
+            name: String,
+            creationDate: {
+                type: Date,
+                default: new Date()
+            },
+            finishDate: {
+                type: Date,
+                default: new Date()
+            }
+        }]
+    }],
 });
 
 var User = module.exports = mongoose.model('User', userSchema);
